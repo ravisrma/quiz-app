@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ravisrma/quiz-app.git
+    targetRevision: HEAD
+    path: Kubernetes-Manifests
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: quiz
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frontend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ravisrma/quiz-app.git
+    targetRevision: HEAD
+    path: Kubernetes-Manifests
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: quiz
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: database
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ravisrma/quiz-app.git
+    targetRevision: HEAD
+    path: Kubernetes-Manifests
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: quiz
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ravisrma/quiz-app.git
+    targetRevision: HEAD
+    path: Kubernetes-Manifests
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: quiz
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
