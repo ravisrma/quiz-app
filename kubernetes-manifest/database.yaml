@@ -15,6 +15,8 @@ spec:
       labels:
         app: mongo
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: mongo
         image: mongo:latest
@@ -26,13 +28,17 @@ spec:
         command:
         - mongod
         - --auth
+        - --bind_ip_all
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         resources:
           requests:
-            memory: "512Mi"
-            cpu: "250m"
-          limits:
             memory: "1Gi"
             cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
       volumes:
       - name: mongo-volume
         persistentVolumeClaim:
