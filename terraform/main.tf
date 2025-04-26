@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "eks-terraform-bucket0"
+    bucket         = "quiz-bucket-app"
     key            = "terraform.tfstate"
     region         = "ap-south-1"
     encrypt        = true

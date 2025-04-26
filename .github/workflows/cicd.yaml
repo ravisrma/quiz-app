@@ -157,17 +157,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Build and push backend Docker image
+    - name: Build and push frontend Docker image
       working-directory: ./quiz-app
       run: |
-        docker build . -t ${{ secrets.DOCKER_USERNAME }}/frontend_quiz
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin 
-        docker push ${{ secrets.DOCKER_USERNAME }}/frontend_quiz:latest   
+        docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend_quiz:latest
+        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin 
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend_quiz:latest   
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'docker.io/${{ secrets.DOCKER_USERNAME }}/frontend_quiz:latest'
+        image-ref: 'docker.io/${{ secrets.DOCKERHUB_USERNAME }}/frontend_quiz:latest'
         format: 'sarif'
         output: 'trivy-results.sarif'
         severity: 'CRITICAL,HIGH'
@@ -181,13 +181,13 @@ jobs:
       run: snyk auth ${{ secrets.SNYK_TOKEN }}
   
     - name: Snyk Container monitor
-      run: snyk container monitor ${{ secrets.DOCKER_USERNAME }}/frontend_quiz:latest --file=Dockerfile   
+      run: snyk container monitor ${{ secrets.DOCKERHUB_USERNAME }}/frontend_quiz:latest --file=Dockerfile   
       working-directory: ./quiz-app
 
     - name: Run Snyk to check for vulnerabilities in the Docker image
       uses: snyk/actions/docker@master
       with:
-        image: ${{ secrets.DOCKER_USERNAME }}/frontend_quiz:latest
+        image: ${{ secrets.DOCKERHUB_USERNAME }}/frontend_quiz:latest
         args: --file=quiz-app/Dockerfile --severity-threshold=high
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -208,14 +208,14 @@ jobs:
     - name: Build and push backend Docker image
       working-directory: ./backend
       run: |
-        docker build . -t ${{ secrets.DOCKER_USERNAME }}/backend_quiz:latest
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin 
-        docker push ${{ secrets.DOCKER_USERNAME }}/backend_quiz:latest    
+        docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/backend_quiz:latest
+        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin 
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend_quiz:latest    
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'docker.io/${{ secrets.DOCKER_USERNAME }}/backend_quiz:latest'
+        image-ref: 'docker.io/${{ secrets.DOCKERHUB_USERNAME }}/backend_quiz:latest'
         format: 'sarif'
         output: 'trivy-results.sarif'
         severity: 'CRITICAL,HIGH' 
@@ -229,13 +229,13 @@ jobs:
       run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
     - name: Snyk Container monitor
-      run: snyk container monitor ${{ secrets.DOCKER_USERNAME }}/backend_quiz:latest --file=Dockerfile   
+      run: snyk container monitor ${{ secrets.DOCKERHUB_USERNAME }}/backend_quiz:latest --file=Dockerfile   
       working-directory: ./backend
 
     - name: Run Snyk to check for vulnerabilities in the Docker image
       uses: snyk/actions/docker@master
       with:
-        image: ${{ secrets.DOCKER_USERNAME }}/backend_quiz:latest
+        image: ${{ secrets.DOCKERHUB_USERNAME }}/backend_quiz:latest
         args: --file=backend/Dockerfile --severity-threshold=high
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
