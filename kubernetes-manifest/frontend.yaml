@@ -25,7 +25,7 @@ spec:
         image: ravisrma/frontend_quiz:latest
         env:
         - name: VITE_REACT_APP_API_URL
-          value: "http://quizapp.cloudcorehub.com/api/questions"
+          value: "http://ravicloudexper.online/api/questions"
         ports:
         - containerPort: 8080
 ---
