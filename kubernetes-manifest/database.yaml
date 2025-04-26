@@ -19,12 +19,9 @@ spec:
         fsGroup: 1000
       containers:
       - name: mongo
-        image: mongo:latest
+        image: mongo:6.0
         ports:
         - containerPort: 27017
-        volumeMounts:
-        - name: mongo-volume
-          mountPath: /data/db
         command: ["mongod"]
         args: ["--bind_ip_all"]
         securityContext:
@@ -37,37 +34,26 @@ spec:
           limits:
             memory: "2Gi"
             cpu: "1"
+        volumeMounts:
+        - name: mongo-volume
+          mountPath: /data/db
       volumes:
       - name: mongo-volume
         persistentVolumeClaim:
           claimName: mongo-pvc
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mongo-pv
-  namespace: quiz
-spec:
-  capacity: 
-    storage: 1Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /data/db
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
   namespace: quiz
-spec: 
-  accessModes:  
-    - ReadWriteOnce
-  storageClassName: ""
+spec:
   resources:
     requests:
       storage: 1Gi
+  storageClassName: gp2
+  accessModes:
+    - ReadWriteOnce
 ---
 apiVersion: v1
 kind: Service
