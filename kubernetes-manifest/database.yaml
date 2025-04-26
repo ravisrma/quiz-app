@@ -25,10 +25,8 @@ spec:
         volumeMounts:
         - name: mongo-volume
           mountPath: /data/db
-        command:
-        - mongod
-        - --auth
-        - --bind_ip_all
+        command: ["mongod"]
+        args: ["--bind_ip_all"]
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000
